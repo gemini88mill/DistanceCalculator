@@ -22,6 +22,7 @@ public class DictanceCalc {
     private double lng1 = 0.0;
     private double lat2 = 0.0;
     private double lng2 = 0.0;
+    private double distanceInKm = 0.0;
 
     public static void main(String[] args){
         DictanceCalc dc = new DictanceCalc();
@@ -39,14 +40,22 @@ public class DictanceCalc {
         dc.setCoord1(dc.latLong(firstCity));
         dc.setCoord2(dc.latLong(secondCity));
 
-        dc.distance();
+        double km = dc.distance();
+        double miles = dc.convert(km);
 
         //---------------------output to shell----------------------------
         System.out.println(dc.getSearchVal1() + ": " + dc.getCoord1());
         System.out.println(dc.getSearchVal2() + ": " + dc.getCoord2());
+        System.out.println("Distance in KM: " + km);
+        System.out.println("Distance in Mi: " + miles);
     }
 
-    private void distance() {
+    private double convert(double distance) {
+        double distanceInMiles = distance * 0.621371;
+        return distanceInMiles;
+    }
+
+    private double distance() {
         //uses Json elements from google to calculate distance.
         elementToDouble(getCoord1(), 1);
         elementToDouble(getCoord2(), 2);
@@ -61,17 +70,18 @@ public class DictanceCalc {
                 Math.cos(phi1) * Math.cos(phi2) *
                         Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
 
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 -a));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         double d = radius * c;
 
-        System.out.println(d);
+        //System.out.println(d);
+        return d;
     }
 
     private void elementToDouble(JsonElement coord1, int marker) {
         double lat = coord1.getAsJsonObject().get("lat").getAsDouble();
         double lng = coord1.getAsJsonObject().get("lng").getAsDouble();
-        System.out.println(lat + " " + lng);
+        //System.out.println(lat + " " + lng);
 
         if(marker == 1){
             setLat1(lat);
@@ -165,5 +175,13 @@ public class DictanceCalc {
 
     public void setLng2(double lng2) {
         this.lng2 = lng2;
+    }
+
+    public double getDistanceInKm() {
+        return distanceInKm;
+    }
+
+    public void setDistanceInKm(double distanceInKm) {
+        this.distanceInKm = distanceInKm;
     }
 }
