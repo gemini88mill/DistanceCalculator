@@ -31,8 +31,8 @@ public class ConvertAddress {
      * returns a JsonElement of the Lat and long coords of the Address given.
      *
      *
-     * @param fullAddress
-     * @return
+     * @param fullAddress String
+     * @return JsonElement
      * @throws IOException
      */
     public JsonElement GoogleJSON(String fullAddress) throws IOException {
