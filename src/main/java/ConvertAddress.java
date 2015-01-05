@@ -37,22 +37,23 @@ public class ConvertAddress {
      */
     public JsonElement GoogleJSON(String fullAddress) throws IOException {
 
-        JsonParser jp = new JsonParser();
-
+        //connection to URL
         URL url = new URL(URL + "?address=" + URLEncoder.encode(fullAddress, "UTF-8")+ "&sensor=false");
         HttpURLConnection conn =(HttpURLConnection) url.openConnection();
         conn.connect();
 
+        //gathering of data
         ByteArrayOutputStream output = new ByteArrayOutputStream(1024);
         IOUtils.copy(conn.getInputStream(), output);
 
+        //closing the stream
         output.close();
 
+        //formatting to Json
         String data = output.toString();
         JsonObject jObj = (JsonObject)new JsonParser().parse(data);
 
         return jObj.get("results").getAsJsonArray().get(0).getAsJsonObject().get("geometry").getAsJsonObject().get("bounds").getAsJsonObject().get("northeast");
-
     }
 
 }

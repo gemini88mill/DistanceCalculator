@@ -1,12 +1,7 @@
 import com.google.gson.JsonElement;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 /**
  * Distance Between Two Cities – Calculates the distance between two cities
@@ -15,17 +10,13 @@ import java.util.regex.Matcher;
  *
  * Created by raphael on 1/1/15.
  */
-
 public class DictanceCalc {
 
-    private final String LAT_LONG_WEBSITE = "http://www.latlong.net/";
-    private final String API_KEY = "AIzaSyCA38wF1sLypi4OUPZw-w9nVaUdbArDR6Q";
+    private JsonElement coord1 = null;
+    private JsonElement coord2 = null;
 
-    private final JsonElement coord1 = null;
-    private final JsonElement coord2 = null;
-
-    private final String searchVal1 = null;
-    private final String searchVal2 = null;
+    private String searchVal1 = null;
+    private String searchVal2 = null;
 
     public static void main(String[] args){
         DictanceCalc dc = new DictanceCalc();
@@ -34,22 +25,24 @@ public class DictanceCalc {
 
         System.out.println("Please Enter First City:");
         firstCity = dc.enterCityNames();
+        dc.setSearchVal1(firstCity);
 
         System.out.println("Please enter Second city:");
         secondCity = dc.enterCityNames();
+        dc.setSearchVal2(secondCity);
 
-        dc.latLong(firstCity);
-        dc.latLong(secondCity);
+        dc.setCoord1(dc.latLong(firstCity));
+        dc.setCoord2(dc.latLong(secondCity));
 
 
 
-        System.out.println(firstCity);
-        System.out.println(secondCity);
+        //---------------------output to shell----------------------------
+        System.out.println(dc.getSearchVal1() + ": " + dc.getCoord1());
+        System.out.println(dc.getSearchVal2() + ": " + dc.getCoord2());
     }
 
-    private void latLong(String cityA) {
+    private JsonElement latLong(String cityA) {
         ConvertAddress conv = new ConvertAddress();
-
         JsonElement latlong = null;
         try {
             latlong = conv.GoogleJSON(cityA);
@@ -58,13 +51,46 @@ public class DictanceCalc {
         }
 
 
-        System.out.println(latlong);
-
+        return latlong;
     }
 
 
     private String enterCityNames() {
         Scanner scan = new Scanner(System.in);
         return scan.nextLine();
+    }
+
+
+    //-----------Getters and setters -------------------
+    public JsonElement getCoord1() {
+        return coord1;
+    }
+
+    public void setCoord1(JsonElement coord1) {
+        this.coord1 = coord1;
+    }
+
+    public JsonElement getCoord2() {
+        return coord2;
+    }
+
+    public void setCoord2(JsonElement coord2) {
+        this.coord2 = coord2;
+    }
+
+    public String getSearchVal1() {
+        return searchVal1;
+    }
+
+    public void setSearchVal1(String searchVal1) {
+        this.searchVal1 = searchVal1;
+    }
+
+    public String getSearchVal2() {
+        return searchVal2;
+    }
+
+    public void setSearchVal2(String searchVal2) {
+        this.searchVal2 = searchVal2;
     }
 }
